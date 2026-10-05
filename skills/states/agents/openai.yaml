@@ -1,0 +1,5 @@
+interface:
+  display_name: "States"
+  short_description: "Every state of one section on its real page, behind a switcher"
+policy:
+  allow_implicit_invocation: false

@@ -20,6 +20,8 @@ These skills are contain topics that I write about on [my personal website](http
 - [**interface-review**](skills/interface-review/SKILL.md): Reviews your work across multiple categories like **UI**, **typography**, **layout**, **color**, **writing** and **accessibility** and gives you a detailed analysis of the findings. User-invoked.
 - [**explain-interface**](skills/explain-interface/SKILL.md): Helps you figure out how an animation, design or a piece of UI was built on the web. User-invoked.
 - [**break**](skills/break/SKILL.md): Renders a component you choose in **every state and scenario** on a temporary page and stress tests it. User-invoked.
+- [**build-design**](skills/build-design/SKILL.md): Builds UI from a Figma file or a design image so it matches the design, using your project's existing tokens and components.
+- [**states**](skills/states/SKILL.md): Renders every state of a section you choose on its real page, with mock data and a switcher, so you can work on each state. User-invoked.
 - [**variant**](skills/variant/SKILL.md): Builds multiple **variants** of a component you're working on and helps you iterate. User-invoked.
 
 ## Install
