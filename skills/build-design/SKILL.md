@@ -7,19 +7,19 @@ description: Builds UI from a Figma file or a design image so it matches the des
 
 This skill turns a design into code that matches it. It reads the design at its source, builds with what the project already has, then compares the result against the design before calling it done.
 
-The design decides. Values come from the design file, never from your taste or a pattern you liked elsewhere. A change the design does not show is a deviation, and a deviation is the user's call. Rounding to an existing token is the one exception, and the report lists every one.
+The design decides. Values come from the design file, never from your taste or a pattern you liked elsewhere. A change the design does not show is a deviation, and a deviation is the user's call.
 
-It owns no domain rules. Where the design breaks one, name the owning skill and ask: `better-accessibility` for contrast and focus, `better-typography` for type, `better-layout` for spacing and structure, `better-colors` for palette, `better-writing` for copy. Reviewing finished work is `interface-review`, exploring alternatives is `variant`, stress testing a component is `break`.
+It owns no domain rules. Where the design breaks one, build it as designed and report the conflict with its owner. Contrast is a requirement in `better-accessibility` and a measurement in `better-colors`. Focus and semantics are `better-accessibility`, type is `better-typography` and spacing and structure are `better-layout`. Palette is `better-colors`, copy is `better-writing` and surfaces, icons and motion are `better-ui`. Reviewing finished work is `interface-review`, exploring alternatives is `variant` and stress testing a component is `break`.
 
 ## 1. Read the design at its source
 
-A Figma link means the Figma MCP. Before saying it is unavailable, check the tool list, since the server is often connected under a name you did not expect. Only when no Figma tool is listed, ask the user to connect one, and do not build from memory or guesswork meanwhile. [figma.md](figma.md) holds which tools to call and what each returns.
+A Figma link means the Figma MCP. Search the available and deferred tools for `figma` before saying it is unavailable, since the server often sits under a name you did not expect. A server that lists only an authenticate tool is connected but signed out, so ask the user to authenticate. With no Figma tool at all, ask the user to connect one, and do not build from memory or guesswork meanwhile. [figma.md](figma.md) holds which tools to call and what each returns.
 
 A screenshot or exported image has no values to read. Sizes are ratios to the capture, so state the scale you assumed and treat every measurement as an estimate. Ask for the Figma link when one exists, since it replaces the whole estimate.
 
-Scope the run to the frames named. Given a page, list its frames and confirm which ones ship before building. Frames that show the same thing at different widths are one piece at several breakpoints, not separate pieces.
+Scope the run to the frames named. Frames that show the same thing at different widths are one piece at several breakpoints, not separate pieces.
 
-This step is done when you hold, for every frame in scope, a screenshot and the exact values for spacing, size, radius, color, type and the components used.
+This step is done when you hold a screenshot of every frame in scope and its values for spacing, size, radius, color, type and the components used. From a Figma file they are exact. From an image they are estimates at the scale you stated.
 
 ## 2. Map the design onto the project
 
@@ -31,11 +31,12 @@ Read the project's tokens and component library before writing anything. Then ma
 | A raw value that equals a token | That token |
 | A raw value with no token | The nearest existing token, listed in the report as rounded |
 | A component instance | The project's component of that name, with the variant the design shows |
+| A component instance with no project equivalent | Plain markup in place, listed as a deviation, and ask whether a component should exist |
 | A one-off group of layers | Plain markup in place, not a new component |
 
-Never add a token, a component variant or an arbitrary value to hit a number. Where rounding would visibly change the design, such as more than 2px off on spacing, stop and ask which way to go.
+Never add a token, a component variant or an arbitrary value to hit a number. Stop and ask which way to go when rounding would visibly change the design. That means more than 2px on spacing or size, or a color landing on a different step.
 
-Check what data the design needs. Wire it to what exists. Where the backend for part of it does not exist yet, build that part as UI fed by props and name it in the report as unwired.
+Check what data the design needs and wire it to what exists. Where the backend for part of it does not exist yet, build that part as UI fed by props and name it in the report as unwired.
 
 ## 3. Build only what the design shows
 
@@ -45,9 +46,9 @@ Leave everything around the piece as it was. No neighbouring copy edits, no icon
 
 ## 4. Compare against the design
 
-Render the build at each frame's width beside the design screenshot and walk it element by element. Compare the same properties step 1 collected. "Gap is 12px, design is 16px" is a finding. "Feels a bit tight" is not.
+Render the build at each frame's width beside the design screenshot and walk it element by element. Compare the properties **Read the design at its source** collected. "Gap is 12px, design is 16px" is a finding. "Feels a bit tight" is not.
 
-With a browser at hand, screenshot each width and compare. Without one, hand over the URL with the widths to check and say the comparison is unverified. Do not report a match you did not look at.
+With a browser at hand, screenshot each width and compare. Without one, hand over the local URL with the widths to check and say the comparison is unverified. Do not report a match you did not look at.
 
 Fix every mismatch you caused, then compare again. This step is done when every remaining difference is a rounding or a question.
 
@@ -59,25 +60,24 @@ Fix every mismatch you caused, then compare again. This step is done when every 
 | Title size | 15px | `text-sm`, 14px | Rounded to token |
 | Badge | Filled pill | Text label | Deviates, asked: no badge component exists |
 
-Then list, one line each:
+Then list, one line each, and omit a list with nothing in it:
 
 - **Unwired.** What renders from props until the backend exists.
 - **Missing states.** What the design does not draw.
 - **Domain conflicts.** Where the design breaks a rule, with the owning skill.
 
-A run where everything matches ends on the table. Say where it is running and at which widths you compared.
+Close by saying where the build is running and at which widths you compared.
 
 ## Before you finish
 
-| Mistake | Fix |
+| You notice | Fix |
 | --- | --- |
-| "Figma isn't connected" said without checking | List the tools first; ask for a connection only when none is there |
-| Layout rebuilt from the screenshot while the file was available | Read values from the file; the screenshot is for comparison |
-| A new token or arbitrary value to hit a design number | Round to the nearest existing token and list it |
-| A custom button where the design shows the library's | Use the project's component with the variant shown |
-| A one-off element extracted into its own component | Plain markup in place |
-| A loading or error state invented | Leave the default and list it as missing |
-| Copy, icons or neighbours changed along the way | Revert anything the design does not show |
-| A contrast or focus problem fixed silently | Build as designed, report the conflict and its owner |
-| "Matches the design" with nothing rendered | Compare at each frame width, or say it is unverified |
-| Placeholder data shipped as if wired | Name every unwired part in the report |
+| "Figma isn't connected" written before any tool search | Search the tools for `figma` first |
+| Values in code that appear in no Figma response, only in the screenshot | Read them from the design context |
+| An arbitrary utility such as `w-[343px]` or a raw hex in the diff | Map it to a token, or ask if rounding shows |
+| A new file under the components directory for a frame that is not a component | Inline it as plain markup |
+| A loading or error branch the design never drew | Remove it, keep the default and list it as missing |
+| Files in the diff that no frame touches | Revert them |
+| A contrast or focus change the design does not show | Restore the design and report the conflict with its owner |
+| A comparison claimed with no screenshot of the build | Render each frame width, or say it is unverified |
+| Hard-coded sample data with no mention in the report | List it under **Unwired** |

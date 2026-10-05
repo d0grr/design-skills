@@ -1,42 +1,44 @@
 # The switcher
 
-The control that flips states. It sits over the section being worked on, so its appearance is not a design decision. Build the spec below and leave it alone.
+The control that switches states. It sits over the thing being judged, so build the spec below and leave it alone.
 
 ## Deliberately outside the design system
 
 Never style the switcher with the project's tokens, fonts or colors. One that looks native to the product becomes part of what you are looking at.
 
-One dark neutral surface, the system font stack and no project variables. Dark reads as chrome over both light and dark pages, so it does not follow the theme.
+One dark neutral surface, the system font stack and no project variables. It does not follow the theme, because dark reads as chrome over both light and dark pages.
 
 ## Behavior
 
-- It sets the `__state` search param and reads the active state back from it. The URL is the source of truth, so every state is a link.
-- Left and right arrows step through the states. Number keys jump to one directly.
+- It sets a `__state` search param and reads the active state back from it. The URL is the source of truth, so every state is a link.
+- Left and right arrows step through the states. Number keys 1–9 jump to the first nine directly.
 - `H` hides and shows the switcher, for screenshots and screen recordings.
-- The active item carries `aria-current="true"`, and the container carries a label.
+- Key handling ignores events with a modifier key, events already `defaultPrevented` and events from inputs, textareas, selects and contenteditable elements.
+- The active button carries `aria-pressed="true"`, and the container carries a label.
 - Switching is instant, with no transition, and keeps the scroll position.
-- Key handling ignores events from inputs, textareas and contenteditable elements, so typing in the section never flips the state.
+- The active state does not reset on resize. Never render the switcher conditionally on viewport width.
 
 ## Structure
 
-One button per state, in the order step 2 of [SKILL.md](SKILL.md) listed them.
+One button per state, in the order **Find the states in the code** listed them.
 
 ```html
 <nav class="state-switcher" aria-label="States">
-  <button type="button" data-state="loading">Loading</button>
-  <button type="button" data-state="empty" aria-current="true">Empty</button>
-  <button type="button" data-state="enterprise">Enterprise</button>
+  <button type="button" data-state="loading" aria-pressed="false">Loading</button>
+  <button type="button" data-state="empty" aria-pressed="true">Empty</button>
+  <button type="button" data-state="enterprise" aria-pressed="false">Enterprise</button>
 </nav>
 ```
 
 ## Placement and styling
 
-Fixed, bottom centre, above everything the page can stack. On a narrow viewport it stays 16px from each edge and scrolls sideways, so every state stays reachable. Arrow keys scroll the active button into view. Where the section sits at the bottom of the viewport, move it to top centre.
+Fixed, bottom centre, above everything the page can stack. On a narrow viewport it stays 16px from each edge and scrolls sideways, so every state stays reachable. Arrow keys scroll the active button into view. Where the section sits at the bottom of the viewport, move the switcher to top centre and say so.
 
 ```css
 .state-switcher {
+  all: unset;
   position: fixed;
-  bottom: 24px;
+  bottom: max(24px, env(safe-area-inset-bottom));
   left: 50%;
   translate: -50% 0;
   z-index: 2147483647;
@@ -49,16 +51,16 @@ Fixed, bottom centre, above everything the page can stack. On a narrow viewport 
   border-radius: 999px;
   background: rgb(20 20 20 / 0.9);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1), 0 8px 24px rgb(0 0 0 / 0.25);
-  font: 13px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font: 13px/1 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   user-select: none;
 }
 
 .state-switcher button {
-  flex-shrink: 0;
+  all: unset;
+  flex: none;
   padding: 7px 14px;
-  border: 0;
   border-radius: 999px;
-  background: none;
+  font: inherit;
   color: rgb(255 255 255 / 0.6);
   cursor: pointer;
 }
@@ -67,7 +69,7 @@ Fixed, bottom centre, above everything the page can stack. On a narrow viewport 
   color: rgb(255 255 255 / 0.85);
 }
 
-.state-switcher button[aria-current="true"] {
+.state-switcher button[aria-pressed="true"] {
   background: rgb(255 255 255 / 0.14);
   color: rgb(255 255 255);
 }
@@ -78,4 +80,4 @@ Fixed, bottom centre, above everything the page can stack. On a narrow viewport 
 }
 ```
 
-In a framework, keep the class names and the structure and change only the rendering syntax. The switcher is its own client file in the fixture folder from step 3, separate from the fixture data, and renders behind the same dev check.
+`all: unset` keeps the project's global button and nav styles out. In a framework, keep the class names and the structure and change only the rendering syntax. The switcher is its own client file in the fixture folder from **Mock at the data boundary**, separate from the fixture data, and renders behind the same dev check.
