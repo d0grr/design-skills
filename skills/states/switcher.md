@@ -10,7 +10,7 @@ One dark neutral surface, the system font stack and no project variables. Dark r
 
 ## Behavior
 
-- It sets a `state` search param and reads the active state back from it. The URL is the source of truth, so every state is a link.
+- It sets the `__state` search param and reads the active state back from it. The URL is the source of truth, so every state is a link.
 - Left and right arrows step through the states. Number keys jump to one directly.
 - `H` hides and shows the switcher, for screenshots and screen recordings.
 - The active item carries `aria-current="true"`, and the container carries a label.
@@ -31,7 +31,7 @@ One button per state, in the order step 2 of [SKILL.md](SKILL.md) listed them.
 
 ## Placement and styling
 
-Fixed, bottom centre, above everything the page can stack. Where the section sits at the bottom of the viewport, move it to top centre.
+Fixed, bottom centre, above everything the page can stack. On a narrow viewport it stays 16px from each edge and scrolls sideways, so every state stays reachable. Arrow keys scroll the active button into view. Where the section sits at the bottom of the viewport, move it to top centre.
 
 ```css
 .state-switcher {
@@ -42,6 +42,9 @@ Fixed, bottom centre, above everything the page can stack. Where the section sit
   z-index: 2147483647;
   display: flex;
   gap: 2px;
+  max-width: calc(100vw - 32px);
+  overflow-x: auto;
+  scrollbar-width: none;
   padding: 4px;
   border-radius: 999px;
   background: rgb(20 20 20 / 0.9);
@@ -51,6 +54,7 @@ Fixed, bottom centre, above everything the page can stack. Where the section sit
 }
 
 .state-switcher button {
+  flex-shrink: 0;
   padding: 7px 14px;
   border: 0;
   border-radius: 999px;
@@ -74,4 +78,4 @@ Fixed, bottom centre, above everything the page can stack. Where the section sit
 }
 ```
 
-In a framework, keep the class names and the structure and change only the rendering syntax. The switcher lives in the fixture file from step 3 and renders behind the same dev check.
+In a framework, keep the class names and the structure and change only the rendering syntax. The switcher is its own client file in the fixture folder from step 3, separate from the fixture data, and renders behind the same dev check.

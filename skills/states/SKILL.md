@@ -39,9 +39,11 @@ Swap the data where the section receives it: the query result, the hook's return
 
 All mock code lives in one place that production cannot reach:
 
-- One fixture file, or one folder, next to the section and clearly named, such as `audit-log.states.ts`.
+- One folder next to the section and clearly named, such as `audit-log.states/`. The fixture data and the switcher are separate files in it. Where the data boundary runs on the server, the switcher is client code, so keeping them apart keeps each in its own module graph.
 - Read only behind the project's dev check, such as `import.meta.env.DEV` or `process.env.NODE_ENV !== "production"`.
-- The section's real code gains one guarded line that hands over the fixture when the `state` search param is set. Nothing else changes.
+- The section's real code gains one guarded line that hands over the fixture when the `__state` search param is set. Nothing else changes.
+
+The double underscore keeps the param clear of the route's own query params, which may already include `state` for a filter or a tab. Read the route's existing params first and pick another name if even `__state` is taken.
 
 Make the data look like the product. Real-shaped names, timestamps, amounts and the item counts users actually have. Three rows of "Test item" make every state look fine.
 
@@ -49,7 +51,7 @@ Loading and pending states hold still. Keep them pending until the switcher move
 
 ## 4. Add the switcher
 
-A fixed control flips the `state` search param, so every state is a link. [switcher.md](switcher.md) holds the spec. Switching is instant, with no transition between states.
+A fixed control flips the `__state` search param, so every state is a link. [switcher.md](switcher.md) holds the spec. Switching is instant, with no transition between states.
 
 ## 5. Confirm every state renders, then hand over
 
@@ -65,7 +67,7 @@ The setup stays while the user works on the visuals. After a visual change, flip
 
 ## 7. Remove it in one step
 
-On the user's word, delete the fixture file, the switcher and the guarded line. Then search the codebase for the fixture name and the `state` param, and check that the diff touches nothing else of the setup. Commit only when asked.
+On the user's word, delete the fixture folder and the guarded line. Then search the codebase for the folder name and the `__state` param, and check that the diff touches nothing else of the setup. Commit only when asked.
 
 ## Before you finish
 
@@ -74,7 +76,8 @@ On the user's word, delete the fixture file, the switcher and the guarded line. 
 | Rendered on a blank scratch route | Keep the section on its real page |
 | Fixtures passed as props deep in the tree | Swap the data where the section receives it |
 | A branch added to the section to show a state | Leave out states the code cannot reach, and list missing ones |
-| Mock code reachable in production | One fixture file behind the dev check |
+| Mock code reachable in production | One fixture folder behind the dev check |
+| Fixture data and switcher in one module | Separate files, so server data never enters the client bundle |
 | "Item 1", "Test user", three rows | Product-shaped data in real quantities |
 | Loading resolves after a timeout | Hold it until the switcher moves |
 | Handed over without loading each state | Load every state; a blank or real-data state means broken plumbing |
