@@ -1,26 +1,26 @@
 ---
-name: states
-description: Renders every state of a section you choose on its real page, with mock data and a switcher, so you can work on each state.
+name: state-machine
+description: Renders every state of a component you choose on its real page, with mock data and a switcher, so you can work on each state.
 disable-model-invocation: true
 ---
 
-# States
+# State machine
 
-This skill takes one section of the product and makes every state it can be in reachable on demand. Mock data feeds the section on its real route, a switcher flips between states and the whole setup is removed in one step when you are done.
+This skill takes one component and makes every state it can be in reachable on demand. Mock data feeds the component on its real route, a switcher flips between states and the whole setup is removed in one step when you are done.
 
 It is a workbench, not a review. The user iterates on the visuals with every state one keypress away. Stress testing a component against hostile content is `break`, exploring alternative designs is `variant` and reviewing finished work is `interface-review`.
 
-Where `break` isolates one component on a scratch page, this skill stays on the real route. The section keeps its real neighbours, providers, data hooks and layout, because those decide what each state actually looks like.
+Where `break` isolates the component on a scratch page, this skill stays on the real route. The component keeps its real neighbours, providers, data hooks and layout, because those decide what each state actually looks like.
 
-## 1. Scope one section
+## 1. Scope one component
 
-One section per run: the audit log table, the network panel, the billing card. "The settings page" spans several, so list them and ask which one.
+One component per run: the audit log table, the network panel, the billing card. "The settings page" spans several, so list them and ask which one.
 
-Restate it in one sentence: what the section shows, which route it lives on and where its data comes from.
+Restate it in one sentence: what the component shows, which route it lives on and where its data comes from.
 
 ## 2. Find the states in the code
 
-The states are the branches the section already has. Read the component and its data hooks for every one:
+The states are the branches the component already has. Read it and its data hooks for every one:
 
 | Kind | States |
 | --- | --- |
@@ -34,13 +34,13 @@ Write the set down before building, one line each, named the way the product tal
 
 ## 3. Mock at the data boundary
 
-Swap the data where the section receives it: the query result, the hook's return or the loader. Leave the components below it untouched. A fixture threaded through props five levels down tests a path production never takes.
+Swap the data where the component receives it: the query result, the hook's return or the loader. Leave its children untouched. A fixture threaded through props five levels down tests a path production never takes.
 
 All mock code lives in one place that production cannot reach:
 
-- One folder next to the section and clearly named, such as `audit-log.states/`. The fixture data and the switcher are separate files in it. Where the data boundary runs on the server, the switcher is client code, so keeping them apart keeps each in its own module graph.
+- One folder next to the component and clearly named, such as `audit-log.states/`. The fixture data and the switcher are separate files in it. Where the data boundary runs on the server, the switcher is client code, so keeping them apart keeps each in its own module graph.
 - Imported only through a dynamic `import()` inside the project's dev check, such as `import.meta.env.DEV` or `process.env.NODE_ENV !== "production"`.
-- The section's real code gains two guarded lines, one that swaps in the fixture when the `__state` search param is set and one that mounts the switcher. Nothing else changes.
+- The component's real code gains two guarded lines, one that swaps in the fixture when the `__state` search param is set and one that mounts the switcher. Nothing else changes.
 
 The double underscore keeps the param clear of the route's own query params, which may already use `state` for a filter, a tab or an OAuth callback. Read the route's existing params first and pick another name if even `__state` is taken.
 
@@ -54,7 +54,7 @@ A fixed control flips the `__state` search param, so every state is a link. [swi
 
 ## 5. Confirm every state renders, then hand over
 
-Load the page once in a browser already at hand and flip through every state. The section shows the mock data, not the real data and not a blank region. Mock data that never appears is the common failure here. Live sync, a cache that wins over the override or a server boundary dropping the fixture all cause it. Fix the plumbing before handing over.
+Load the page once in a browser already at hand and flip through every state. The component shows the mock data, not the real data and not a blank region. Mock data that never appears is the common failure here. Live sync, a cache that wins over the override or a server boundary dropping the fixture all cause it. Fix the plumbing before handing over.
 
 With no browser at hand, say so and hand the URL over for the user to check.
 
@@ -72,9 +72,9 @@ On the user's word, delete the fixture folder and the two guarded lines. Then se
 
 | Mistake | Fix |
 | --- | --- |
-| Rendered on a blank scratch route | Keep the section on its real page |
-| Fixtures passed as props deep in the tree | Swap the data where the section receives it |
-| A branch added to the section to show a state | Leave out states the code cannot reach, and list missing ones |
+| Rendered on a blank scratch route | Keep the component on its real page |
+| Fixtures passed as props deep in the tree | Swap the data where the component receives it |
+| A branch added to the component to show a state | Leave out states the code cannot reach, and list missing ones |
 | Mock code reachable in production | One fixture folder, imported only behind the dev check |
 | Fixture data and switcher in one module | Separate files, so server data never enters the client bundle |
 | "Item 1", "Test user", three rows | Product-shaped data in real quantities |

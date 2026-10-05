@@ -32,7 +32,7 @@ One button per state, in the order **Find the states in the code** listed them.
 
 ## Placement and styling
 
-Fixed, bottom centre, above everything the page can stack. On a narrow viewport it stays 16px from each edge and scrolls sideways, so every state stays reachable. Arrow keys scroll the active button into view. Where the section sits at the bottom of the viewport, move the switcher to top centre and say so.
+Fixed, bottom centre, above everything the page can stack. On a narrow viewport it stays 16px from each edge and scrolls sideways, so every state stays reachable. Arrow keys scroll the active button into view. Where the component sits at the bottom of the viewport, move the switcher to top centre and say so.
 
 ```css
 .state-switcher {

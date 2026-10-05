@@ -1,5 +1,5 @@
 interface:
-  display_name: "States"
+  display_name: "State Machine"
   short_description: "Every state of one section on its real page, behind a switcher"
 policy:
   allow_implicit_invocation: false
