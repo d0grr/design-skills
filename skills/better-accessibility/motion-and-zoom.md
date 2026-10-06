@@ -23,30 +23,6 @@ Wrap animations in `@media (prefers-reduced-motion: no-preference)`, so users wh
 <div className="motion-safe:transition-transform motion-safe:hover:-translate-y-1" />
 ```
 
-For an existing codebase where opt-in isn't feasible, use a global fallback with explicit exceptions for progress feedback:
-
-```css
-@media (prefers-reduced-motion: reduce) {
-  * {
-    scroll-behavior: auto !important;
-  }
-
-  *:not([data-motion-feedback]),
-  *:not([data-motion-feedback])::before,
-  *:not([data-motion-feedback])::after {
-    animation-delay: 0ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-delay: 0ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-```
-
-Mark each animated spinner or progress element with `data-motion-feedback`, including the owner of an animated pseudo-element. The exception does not extend to descendants. Keep that feedback subtle, or replace it with a static status that still communicates progress.
-
-The short duration lets finite animations finish and can preserve completion events. Do not rely solely on those events for application state; cancellation or an unchanged property can prevent them.
-
 ### What to disable vs reduce
 
 Reduced motion targets vestibular triggers, not feedback.
