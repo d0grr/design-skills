@@ -23,21 +23,6 @@ Wrap animations in `@media (prefers-reduced-motion: no-preference)`, so users wh
 <div className="motion-safe:transition-transform motion-safe:hover:-translate-y-1" />
 ```
 
-For an existing codebase where opt-in isn't feasible, the global kill switch is the fallback:
-
-```css
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-```
-
-`0.01ms` rather than `none`, so `animationend` and `transitionend` still fire and JS waiting on them doesn't hang.
-
 ### What to disable vs reduce
 
 Reduced motion targets vestibular triggers, not feedback.

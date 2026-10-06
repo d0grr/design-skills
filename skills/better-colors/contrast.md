@@ -58,7 +58,9 @@ Always remeasure after changing a value. Do not assume a fix landed.
 
 ## Pick text polarity from the background
 
-Above about OKLCH `L` `0.71`, dark text scores higher. At or below it, light text does, even on backgrounds that already look light.
+Compare black and white using the project's required contrast metric. APCA and WCAG 2 can favor different text colors on the same background. A higher score does not by itself mean the pair passes.
+
+WCAG 2's neutral crossover is near 56% OKLCH lightness. At `oklch(65% 0 0)`, black measures about `6.49:1` and white `3.23:1`. Only black passes AA for normal text. For colored backgrounds or other foregrounds, measure the actual pair rather than applying a crossover.
 
 ## What to check
 
