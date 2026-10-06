@@ -41,7 +41,7 @@ Fixed, bottom centre, above everything the page can stack. On a narrow viewport 
   bottom: max(24px, env(safe-area-inset-bottom));
   left: 50%;
   translate: -50% 0;
-  z-index: 2147483647;
+  z-index: 9999;
   display: flex;
   gap: 2px;
   max-width: calc(100vw - 32px);
@@ -80,4 +80,4 @@ Fixed, bottom centre, above everything the page can stack. On a narrow viewport 
 }
 ```
 
-`all: unset` keeps the project's global button and nav styles out. In a framework, keep the class names and the structure and change only the rendering syntax. The picker renders behind the same dev check as the variants.
+`all: unset` keeps the project's global button and nav styles out. In a framework, keep the class names and the structure and change only the rendering syntax. The picker renders only behind the project's dev check.

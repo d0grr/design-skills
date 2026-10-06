@@ -23,7 +23,7 @@ Every `SKILL.md` carries:
 - **Frontmatter** with `name` (matching the directory) and `description`.
 - **A plain-name H1** and a two-sentence opener saying what the skill is and what it does. Not what the domain means or why it matters: an agent does not need motivating, and a reader can tell the difference.
 - **A calibration line or two**, in the opener or in its own section where it needs the room. This is where a skill says how hard to press: which values are exact rather than approximate, what counts as a finding versus a preference, when the right answer is to write nothing. A skill that lists rules without saying how hard to press leaves that to chance. That is the difference between a review that blocks on evidence and one that blocks on taste. Give the section a heading that carries its own point (`Evidence, not taste`), not a generic label.
-- **Headings that carry the point**, in sentence case. `Native elements first`, not `Semantics`. Number them only where the steps genuinely run in order, as the verb skills `variant`, `break`, `state-machine` and `build-design` do; numbering flat reference implies a sequence that isn't there and makes every insertion a renumber.
+- **Headings that carry the point**, in sentence case. `Native elements first`, not `Semantics`. Number them only where the steps genuinely run in order, as in a verb skill's procedure. Numbering flat reference implies a sequence that isn't there and makes every insertion a renumber.
 - **A hand-off line** naming the sibling skills that own adjacent topics.
 - **A `## Before you finish` table**, two columns, where the domain has recurring mistakes. The left column is the detection pattern, which is what a principle statement does not give you. The heading names the moment on purpose: `Common mistakes` is a label an agent reads past while orienting, and `Before you finish` names the point in the work where the table is worth consulting.
 - **A `## Reporting` section** in every domain skill, carrying that domain's severity ladder, its verification checks and the format for a standalone review. See below.
@@ -41,6 +41,8 @@ Each skill carries the format for the review it produces. `better-interface` hol
 Those three overlap, and that overlap is the price of a skill that works when installed alone. Someone who installs only `better-typography` has no `better-interface` on disk to read a format out of.
 
 The same test settles any other overlap. A skill keeps a fact its own output cannot be produced without, such as a threshold it reports against or the trigger list it builds to, and names the owner beside it. A hand-off is enough when, without the sibling, the topic is simply out of scope. A recipe or a longer restatement of another skill's rule never qualifies.
+
+Two copies pass that test because each skill needs them whole, and they must match. `variant`'s `picker.md` and `state-machine`'s `switcher.md` are one text with the noun swapped. The paragraphs on the throwaway route in `break` and `state-machine` are one text, word for word. Change each pair together.
 
 ### Invocation
 

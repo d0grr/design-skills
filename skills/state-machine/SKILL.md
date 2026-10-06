@@ -8,9 +8,7 @@ disable-model-invocation: true
 
 This skill takes one component and renders it on a throwaway page in every state it can be in. Mock data feeds each state, a switcher flips between them and the page is deleted in one step when you are done.
 
-It is a workbench, not a review. The user iterates on the visuals with every state one keypress away. Stress testing a component against hostile content is `break`, exploring alternative designs is `variant` and reviewing finished work is `interface-review`.
-
-`break` stacks every hostile scenario on one page for a single look. This page shows one product state at a time and stays up while the user works on it.
+It is a workbench, not a review. The page stays up while the user works on the visuals, one state on screen and every other a keypress away. Stacking hostile scenarios on one page for a single look is `break`, exploring alternative designs is `variant` and reviewing finished work is `interface-review`.
 
 ## 1. Scope one component
 
@@ -34,12 +32,11 @@ Write the set down before building, one line each, named the way the product tal
 
 ## 3. Build the throwaway page
 
-One scratch route inside the app, such as `/states/audit-log`, holding the real component imported from the project. A route inside the app inherits its layout, fonts, global styles and providers for free.
+A scratch route inside the app holds the real component, imported from the project and untouched. The route inherits the app's layout, fonts, global styles and providers for free. Serve it only behind the project's dev check, such as `import.meta.env.DEV` or `process.env.NODE_ENV !== "production"`. In Next, the page calls `notFound()` in production.
 
-- Serve it only behind the project's dev check, such as `import.meta.env.DEV` or `process.env.NODE_ENV !== "production"`. In Next, the page calls `notFound()` in production.
-- Render one instance in a container as wide as the component is in production. The container, the fixtures and the switcher are everything the page adds: no fonts, styles or themes of its own.
-- Where the framework splits server from client components, the page is client code, `"use client"` in Next.
-- Keep the page, its fixtures and its switcher in one folder, so removal is one delete.
+Where the framework splits server from client components, the page is client code, `"use client"` in Next. Otherwise fixture data can silently vanish crossing that boundary, and the page renders empty.
+
+Render one instance in a container as wide as the component is in production. The container, the fixtures and the switcher are everything the page adds, with no fonts, styles or themes of its own. Keep the page, its fixtures and its switcher in one folder, such as `/states/audit-log`, so removal is one delete.
 
 ## 4. Feed each state at the data boundary
 
@@ -66,13 +63,13 @@ With no browser at hand, say so and hand the URL over for the user to check.
 
 Then hand over the URL, the state list and the switcher keys. Stop there. Changing how a state looks is the user's next request, not part of this one.
 
-## 7. Keep it up while the user iterates
+## Re-check every state after each change
 
-The page stays while the user works on the visuals. After a visual change, flip through every state again, since a fix for one state often breaks another.
+After a visual change, flip through every state again, since a fix for one state often breaks another.
 
-## 8. Remove it in one step
+## Remove it in one step, on the user's word
 
-On the user's word, delete the page folder and any seam the user approved. Then search the codebase for the route and fixture names, and check that the diff touches nothing else of the setup. Commit only when asked.
+Delete the page folder and any seam the user approved. Then search the codebase for the route and fixture names, and check that the diff touches nothing else of the setup. Commit only when asked.
 
 ## Before you finish
 

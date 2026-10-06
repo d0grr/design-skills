@@ -80,4 +80,4 @@ Fixed, bottom centre, above everything the page can stack. On a narrow viewport 
 }
 ```
 
-`all: unset` keeps the project's global button and nav styles out. In a framework, keep the class names and the structure and change only the rendering syntax. The switcher is its own file in the page folder from **Build the throwaway page** and renders only on that page.
+`all: unset` keeps the project's global button and nav styles out. In a framework, keep the class names and the structure and change only the rendering syntax. The switcher renders only behind the project's dev check.

@@ -30,13 +30,13 @@ Write the kept scenarios down before building, one line each. Then say which axe
 
 ## 3. Build the harness page
 
-One throwaway page, holding the real component imported from the project, rendered once per scenario in a single column with a short text label above each instance.
+One throwaway page renders the component once per scenario in a single column, with a short text label above each instance.
 
-The component ships untouched, in its real environment. A scratch route inside the app gives it the app's own layout, fonts and global styles for free. Serve that route only behind the project's dev check, such as `import.meta.env.DEV`.
+A scratch route inside the app holds the real component, imported from the project and untouched. The route inherits the app's layout, fonts, global styles and providers for free. Serve it only behind the project's dev check, such as `import.meta.env.DEV` or `process.env.NODE_ENV !== "production"`. In Next, the page calls `notFound()` in production.
+
+Where the framework splits server from client components, the page is client code, `"use client"` in Next. Otherwise fixture data can silently vanish crossing that boundary, and the page renders empty.
 
 Labels, container widths and fixture props are everything the page adds. No fonts or styles of its own, no simulated themes or token swaps, no probes. A component observed under any of those is a different component.
-
-Where the framework splits server from client components, the page itself is client code, `"use client"` in Next. Otherwise fixture props can silently vanish crossing that boundary, and every scenario renders empty.
 
 Feed scenarios as props and fixture data. The harness never imports production state, never wires to live data and production never imports from the harness.
 
