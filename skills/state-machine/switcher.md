@@ -41,7 +41,7 @@ Fixed, bottom centre, above everything the page can stack. On a narrow viewport 
   bottom: max(24px, env(safe-area-inset-bottom));
   left: 50%;
   translate: -50% 0;
-  z-index: 2147483647;
+  z-index: 9999;
   display: flex;
   gap: 2px;
   max-width: calc(100vw - 32px);
