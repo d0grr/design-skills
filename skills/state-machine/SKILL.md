@@ -1,22 +1,22 @@
 ---
 name: state-machine
-description: Renders every state of a component you choose on its real page, with mock data and a switcher, so you can work on each state.
+description: Renders every state of a component you choose on a throwaway page, with mock data and a switcher, so you can work on each state.
 disable-model-invocation: true
 ---
 
 # State machine
 
-This skill takes one component and makes every state it can be in reachable on demand. Mock data feeds the component on its real route, a switcher flips between states and the whole setup is removed in one step when you are done.
+This skill takes one component and renders it on a throwaway page in every state it can be in. Mock data feeds each state, a switcher flips between them and the page is deleted in one step when you are done.
 
 It is a workbench, not a review. The user iterates on the visuals with every state one keypress away. Stress testing a component against hostile content is `break`, exploring alternative designs is `variant` and reviewing finished work is `interface-review`.
 
-Where `break` isolates the component on a scratch page, this skill stays on the real route. The component keeps its real neighbours, providers, data hooks and layout, because those decide what each state actually looks like.
+`break` stacks every hostile scenario on one page for a single look. This page shows one product state at a time and stays up while the user works on it.
 
 ## 1. Scope one component
 
 One component per run: the audit log table, the network panel, the billing card. "The settings page" spans several, so list them and ask which one.
 
-Restate it in one sentence: what the component shows, which route it lives on and where its data comes from.
+Restate it in one sentence: what the component shows, where it renders in production and where its data comes from.
 
 ## 2. Find the states in the code
 
@@ -32,55 +32,62 @@ A state the code cannot reach is not a state. Do not add a branch to render one.
 
 Write the set down before building, one line each, named the way the product talks about it: `empty`, `enterprise`, `member-no-access`. Say which kinds you dropped and why in one line. Combine kinds only where the code branches on the combination, such as `member-empty`, never as a cross product.
 
-## 3. Mock at the data boundary
+## 3. Build the throwaway page
 
-Swap the data where the component receives it: the query result, the hook's return or the loader. Leave its children untouched. A fixture threaded through props five levels down tests a path production never takes.
+One scratch route inside the app, such as `/states/audit-log`, holding the real component imported from the project. A route inside the app inherits its layout, fonts, global styles and providers for free.
 
-All mock code lives in one place that production cannot reach:
+- Serve it only behind the project's dev check, such as `import.meta.env.DEV` or `process.env.NODE_ENV !== "production"`. In Next, the page calls `notFound()` in production.
+- Render one instance in a container as wide as the component is in production. The container, the fixtures and the switcher are everything the page adds: no fonts, styles or themes of its own.
+- Where the framework splits server from client components, the page is client code, `"use client"` in Next.
+- Keep the page, its fixtures and its switcher in one folder, so removal is one delete.
 
-- One folder next to the component and clearly named, such as `audit-log.states/`. The fixture data and the switcher are separate files in it. Where the data boundary runs on the server, the switcher is client code, so keeping them apart keeps each in its own module graph.
-- Imported only through a dynamic `import()` inside the project's dev check, such as `import.meta.env.DEV` or `process.env.NODE_ENV !== "production"`.
-- The component's real code gains two guarded lines, one that swaps in the fixture when the `__state` search param is set and one that mounts the switcher. Nothing else changes.
+## 4. Feed each state at the data boundary
 
-The double underscore keeps the param clear of the route's own query params, which may already use `state` for a filter, a tab or an OAuth callback. Read the route's existing params first and pick another name if even `__state` is taken.
+Supply the data where the component receives it, from the page, without editing the component. In order of preference:
+
+1. Props, where the component takes its data as props.
+2. The app's own data seam: a seeded query cache, a mock provider or the project's request mocks.
+
+A fixture threaded through props five levels down tests a path production never takes. Where the only way in is editing the component, say so and ask before adding a seam.
 
 Make the data look like the product. Real-shaped names, timestamps, amounts and the item counts users actually have. Three rows of "Test item" make every state look fine.
 
 Loading and pending states hold still. Keep them pending until the switcher moves, rather than resolving after a timeout.
 
-## 4. Add the switcher
+## 5. Add the switcher
 
-A fixed control flips the `__state` search param, so every state is a link. [switcher.md](switcher.md) holds the spec.
+A fixed control flips the `__state` search param, so every state is a link. The double underscore keeps it clear of any param the app's layout reads. [switcher.md](switcher.md) holds the spec.
 
-## 5. Confirm every state renders, then hand over
+## 6. Confirm every state renders, then hand over
 
-Load the page once in a browser already at hand and flip through every state. The component shows the mock data, not the real data and not a blank region. Mock data that never appears is the common failure here. Live sync, a cache that wins over the override or a server boundary dropping the fixture all cause it. Fix the plumbing before handing over.
+Load the page once in a browser already at hand and flip through every state. The component shows the mock data, not the real data and not a blank region. Mock data that never appears is the common failure here. Live sync, a cache that refetches over the seed or a server boundary dropping the fixture all cause it. Fix the plumbing before handing over.
 
 With no browser at hand, say so and hand the URL over for the user to check.
 
 Then hand over the URL, the state list and the switcher keys. Stop there. Changing how a state looks is the user's next request, not part of this one.
 
-## 6. Keep it up while the user iterates
+## 7. Keep it up while the user iterates
 
-The setup stays while the user works on the visuals. After a visual change, flip through every state again, since a fix for one state often breaks another.
+The page stays while the user works on the visuals. After a visual change, flip through every state again, since a fix for one state often breaks another.
 
-## 7. Remove it in one step
+## 8. Remove it in one step
 
-On the user's word, delete the fixture folder and the two guarded lines. Then search the codebase for the folder name and the `__state` param, and check that the diff touches nothing else of the setup. Commit only when asked.
+On the user's word, delete the page folder and any seam the user approved. Then search the codebase for the route and fixture names, and check that the diff touches nothing else of the setup. Commit only when asked.
 
 ## Before you finish
 
 | Mistake | Fix |
 | --- | --- |
-| Rendered on a blank scratch route | Keep the component on its real page |
-| Fixtures passed as props deep in the tree | Swap the data where the component receives it |
+| The component edited to accept fixtures | Feed data from the page through props or the app's data seam; ask before adding a seam |
+| A rebuilt lookalike component on the page | Import the real component from the project |
+| The page restyles or re-themes the component | The app's layout, fonts and tokens as they are |
+| Fixtures passed as props deep in the tree | Supply the data where the component receives it |
 | A branch added to the component to show a state | Leave out states the code cannot reach, and list missing ones |
-| Mock code reachable in production | One fixture folder, imported only behind the dev check |
-| Fixture data and switcher in one module | Separate files, so server data never enters the client bundle |
+| Page route reachable in production | Serve it only behind the dev check |
 | "Item 1", "Test user", three rows | Product-shaped data in real quantities |
 | Loading resolves after a timeout | Hold it until the switcher moves |
 | Handed over without loading each state | Load every state; a blank or real-data state means broken plumbing |
 | Switcher styled with the project's tokens | Keep it visibly outside the design system |
 | Visuals changed unasked | Hand over and wait |
-| Setup deleted in the same turn it was built | Remove it only on the user's word |
-| Fixture names or the param left behind | Search for both after removal |
+| Page deleted in the same turn it was built | Remove it only on the user's word |
+| Route or fixture names left behind | Search for both after removal |
