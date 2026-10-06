@@ -32,7 +32,7 @@ Write the kept scenarios down before building, one line each. Then say which axe
 
 One throwaway page renders the component once per scenario in a single column, with a short text label above each instance.
 
-A scratch route inside the app holds the real component, imported from the project and untouched. The route inherits the app's layout, fonts, global styles and providers for free. Serve it only behind the project's dev check, such as `import.meta.env.DEV` or `process.env.NODE_ENV !== "production"`. In Next, the page calls `notFound()` in production.
+A scratch route inside the app holds the real component, imported from the project and untouched. The route inherits the app's layout, fonts, global styles and providers for free.
 
 Where the framework splits server from client components, the page is client code, `"use client"` in Next. Otherwise fixture data can silently vanish crossing that boundary, and the page renders empty.
 
@@ -76,7 +76,6 @@ The page is half the report, so it outlives the findings table. Leave it running
 | A scenario missing the content it was fed | The harness is broken, not the component; make the page client code and reload once |
 | A rebuilt lookalike component in the harness | Import the real component from the project |
 | The harness restyles or re-themes the component | The app's layout, fonts and tokens as they are; labels and widths are all the page adds |
-| Harness route reachable in production | Serve it only behind the dev check |
 | A browser launched, debugged or screenshotted per scenario | One load and one look, or hand the URL over and skip the look |
 | Findings phrased as taste | Report what was visible on the page, or nothing |
 | A break reported without an owner | Name the domain skill whose rules diagnose it |

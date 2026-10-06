@@ -32,7 +32,7 @@ Write the set down before building, one line each, named the way the product tal
 
 ## 3. Build the throwaway page
 
-A scratch route inside the app holds the real component, imported from the project and untouched. The route inherits the app's layout, fonts, global styles and providers for free. Serve it only behind the project's dev check, such as `import.meta.env.DEV` or `process.env.NODE_ENV !== "production"`. In Next, the page calls `notFound()` in production.
+A scratch route inside the app holds the real component, imported from the project and untouched. The route inherits the app's layout, fonts, global styles and providers for free.
 
 Where the framework splits server from client components, the page is client code, `"use client"` in Next. Otherwise fixture data can silently vanish crossing that boundary, and the page renders empty.
 
@@ -80,7 +80,6 @@ Delete the page folder and any seam the user approved. Then search the codebase 
 | The page restyles or re-themes the component | The app's layout, fonts and tokens as they are |
 | Fixtures passed as props deep in the tree | Supply the data where the component receives it |
 | A branch added to the component to show a state | Leave out states the code cannot reach, and list missing ones |
-| Page route reachable in production | Serve it only behind the dev check |
 | "Item 1", "Test user", three rows | Product-shaped data in real quantities |
 | Loading resolves after a timeout | Hold it until the switcher moves |
 | Handed over without loading each state | Load every state; a blank or real-data state means broken plumbing |

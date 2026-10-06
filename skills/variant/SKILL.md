@@ -75,7 +75,7 @@ Select with a URL search param such as `?__variant=quiet`, so every variant is a
 
 Render one variant at a time, full size. Thumbnails distort spacing and scale, and spacing is usually the thing you are choosing between.
 
-Variant files may import production components. Only the hosting page imports a variant, through a dynamic `import()` inside the project's dev check, such as `import.meta.env.DEV`. Nothing else in production imports from the harness.
+Variant files may import production components. Only the hosting page imports a variant, and nothing else imports from the harness.
 
 Where no page can host it, build one self-contained HTML file and keep the same picker.
 
@@ -109,7 +109,6 @@ Asked for another round instead, keep the harness and run **Name the axis before
 | Variants differ only in accent color or copy | Move one to a different position on the primary axis, or cut it |
 | Every axis varies at once | Vary one; let the rest follow from it |
 | Judged on a blank route | Host them on the page that will contain the piece |
-| Variants reachable in production | Import them only behind the dev check |
 | Lorem ipsum, three rows, "Jane Doe" | Real copy and the item count the page will really carry |
 | The boldest variant skips keyboard or focus | Clear the floor or drop the direction |
 | A favourite marked in the table | State each variant's cost and let the user choose |
